@@ -1,2 +1,3 @@
-# CI-CD-practice
-This repo serves as practice for personal CI/CD work
+# Github Actions Demo
+
+Implement CI/CD with Github Actions.
