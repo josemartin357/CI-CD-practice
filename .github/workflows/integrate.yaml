@@ -1,0 +1,32 @@
+# Defines the name of the workflow
+name: Node continuous integration
+
+# Specifies that the workflow should trigger on pull requests targeting the 'master' branch
+on:
+  pull_request:
+    branches: [master]
+
+# Starts the 'test_pull_request' job
+jobs:
+  test_pull_request:
+    # Specifies the operating system environment for the job
+    runs-on: ubuntu-latest
+
+    # Defines the steps to be executed within the job
+    steps:
+      # Checks out the repository code into the workflow's workspace
+      - uses: actions/checkout@v2
+
+      # Sets up the Node.js environment with version 12
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      # Installs project dependencies using 'npm ci'
+      - run: npm ci
+
+      # Runs the project's tests using 'npm test'
+      - run: npm test
+
+      # Builds the project using 'npm run build'
+      - run: npm run build
