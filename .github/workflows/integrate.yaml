@@ -38,5 +38,4 @@ jobs:
       - name: Handle build failure
         if: ${{ failure() }}
         run: |
-          echo "Build failed. Sending notification to Slack."
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Build failed in GitHub repository."}' <https://hooks.slack.com/services/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>
+          curl -X POST --data-urlencode "payload={\"channel\": \"#github-notifications\", \"username\": \"webhookbot\", \"text\": \"This is posted to #github-notifications and comes from a bot named webhookbot.\", \"icon_emoji\": \":ghost:\"}" https://hooks.slack.com/services/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
