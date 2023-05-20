@@ -23,10 +23,19 @@ jobs:
           node-version: 12
 
       # Installs project dependencies using 'npm ci'
-      - run: npm ci
+      - run:
+          npm ci
 
-      # Runs the project's tests using 'npm test'
-      - run: npm test
+          # Runs the project's tests using 'npm test'
+      - name: Run tests
+        run: npm test
 
       # Builds the project using 'npm run build'
-      - run: npm run build
+      - name: Build project
+        run: npm run build
+
+      # Executes subsequent steps only if the previous step fails
+      - name: Handle build failure
+        if: ${{ failure() }}
+        run: |
+          echo "Build failed. Sending notification to Slack."
