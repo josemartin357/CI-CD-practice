@@ -1,10 +1,10 @@
 # Defines the name of the workflow
 name: Node continuous integration
 
-# Specifies that the workflow should trigger on pull requests targeting the 'master' branch
+# Specifies that the workflow should trigger on pull requests targeting the 'main' branch
 on:
   pull_request:
-    branches: [master]
+    branches: [main]
 
 # Starts the 'test_pull_request' job
 jobs:
