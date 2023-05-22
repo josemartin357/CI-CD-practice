@@ -3,7 +3,7 @@ const dayOfTheWeek = (date = new Date()) => {
     "Sunday",
     "Monday",
     "Tuesday",
-    "Wednesday",
+    "Wednessday",
     "Thursday",
     "Friday",
     "Saturday",
