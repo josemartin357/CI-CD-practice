@@ -37,7 +37,7 @@ jobs:
   send_notification_to_slack:
     name: Send notification to Slack
     runs-on: ubuntu-22.04
-    if: always()
+    if: ${{ needs.Build.result == 'failure' }}
     needs: [Build]
 
     steps:
