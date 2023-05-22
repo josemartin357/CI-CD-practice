@@ -1,0 +1,58 @@
+# # Defines the name of the workflow
+# name: Node continuous integration
+
+# # Specifies that the workflow should trigger on pull requests targeting the 'main' branch
+# on:
+#   pull_request:
+#     branches: [main]
+
+# # Starts the 'test_pull_request' job
+# jobs:
+#   Build:
+#     # Specifies the operating system environment for the job
+#     runs-on: ubuntu-latest
+
+#     # Defines the steps to be executed within the job
+#     steps:
+#       # Checks out the repository code into the workflow's workspace
+#       - uses: actions/checkout@v2
+
+#       # Sets up the Node.js environment with version 12
+#       - uses: actions/setup-node@v1
+#         with:
+#           node-version: 12
+
+#       # Installs project dependencies using 'npm ci'
+#       - run:
+#           npm ci
+
+#           # Runs the project's tests using 'npm test'
+#       - name: Run tests
+#         run: npm test
+
+#       # Builds the project using 'npm run build'
+#       - name: Build project
+#         run: npm run build
+
+#   send_notification_to_slack:
+#     name: Send notification to Slack
+#     runs-on: ubuntu-22.04
+#     if: ${{ needs.Build.result == 'failure' }}
+#     needs: [Build]
+
+#     steps:
+#       - run: |
+#           failureText="❌ *Alert:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Build #${{ github.run_number }}> has failed. Review the build logs for more details. \n*Repository:* ${{ github.repository }} \n*Branch:* ${{ github.head_ref }} \n*Event:* ${{ github.event_name }} \n*Submitted by:* ${{ github.actor }}"
+
+#           status="${{ contains(needs.*.result, 'failure') && 'failure' }}"
+
+#           if [ "$status" = 'failure' ]; then
+#             color='danger'
+#             text=$failureText
+#           fi
+
+#           echo "{attachments: [{text: \"$text\", color: \"$color\"}]}" | curl \
+#             "${{ secrets.SLACK_WEBHOOK_URL }}" \
+#             -X "POST" \
+#             --header "Content-Type: application/json" \
+#             --data-binary @-

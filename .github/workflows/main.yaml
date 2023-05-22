@@ -1,0 +1,22 @@
+name: Node continuous integration
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build project
+        uses: ./.github/workflows/build.yaml
+
+  send_notification_to_slack:
+    name: Send notification to Slack
+    needs: [build]
+    if: ${{ needs.build.result == 'failure' }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Send notification to Slack
+        uses: ./.github/workflows/slack-notifications.yaml

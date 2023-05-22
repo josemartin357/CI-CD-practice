@@ -1,0 +1,25 @@
+name: Send notification to Slack
+
+on:
+  workflow_run:
+    workflows: ["Node continuous integration"]
+    types:
+      - completed
+
+jobs:
+  send_notification_to_slack:
+    name: Send notification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git
+        uses: actions/checkout@v2
+
+      - name: Send Slack notification
+        run: |
+          failureText="❌ *Alert:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Build #${{ github.run_number }}> has failed. Review the build logs for more details. \n*Repository:* ${{ github.repository }} \n*Branch:* ${{ github.head_ref }} \n*Event:* ${{ github.event_name }} \n*Submitted by:* ${{ github.actor }}"
+
+          echo "{attachments: [{text: \"$failureText\", color: \"danger\"}]}" | curl \
+            "${{ secrets.SLACK_WEBHOOK_URL }}" \
+            -X "POST" \
+            --header "Content-Type: application/json" \
+            --data-binary @-
