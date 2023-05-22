@@ -23,10 +23,9 @@ jobs:
           node-version: 12
 
       # Installs project dependencies using 'npm ci'
-      - run:
-          npm ci
+      - run: npm ci
 
-          # Runs the project's tests using 'npm test'
+      # Runs the project's tests using 'npm test'
       - name: Run tests
         run: npm test
 
@@ -48,7 +47,7 @@ jobs:
 
       - name: Notify Slack
         run: |
-          failureText="❌ *Failure Alert* \n*Title:* NBCU Backstage Actions \n*Failed Action Link:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}| #${{ github.run_number }}> \n*Repository:* <${{ github.server_url }}/${{ github.repository }}| ${{ github.repository }}> \n*Event:* ${{ github.event_name }} \n*Commit Message:* ${{ steps.GetCommitMessage.outputs.commit_message }} \n*Run ID:* ${{ github.run_id }} \n*Submitted By:* <${{ github.server_url }}/${{ github.repository }}/commits?author=/${{ github.actor }}| #${{ github.actor }}> \nReview the build logs for more details."
+          failureText="❌ *Failure Alert* \n*Title:* NBCU Backstage Actions \n*Failed Action Link:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}| #${{ github.run_number }}> \n*Repository:* <${{ github.server_url }}/${{ github.repository }}| ${{ github.repository }}> \n*Event:* ${{ github.event_name }} \n*Commit Message:* ${{ steps.Get Commit Message.outputs.commit_message }} \n*Run ID:* ${{ github.run_id }} \n*Submitted By:* <${{ github.server_url }}/${{ github.repository }}/commits?author=/${{ github.actor }}| #${{ github.actor }}> \nReview the build logs for more details."
 
           status="${{ contains(needs.*.result, 'failure') && 'failure' }}"
 
