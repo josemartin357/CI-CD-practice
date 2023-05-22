@@ -42,12 +42,21 @@ jobs:
 
     steps:
       - run: |
+          successText="<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Build #${{ github.run_number }}> of *${{ github.repository }}@${{ github.ref_name }}* by *${{ github.actor }}* completed successfully."
           failureText="❌ *Alert:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Build #${{ github.run_number }}> has failed. Review the build logs for more details. \n*Repository:* ${{ github.repository }} \n*Branch:* ${{ github.head_ref }} \n*Event:* ${{ github.event_name }} \n*Submitted by:* ${{ github.actor }}"
-          status="${{ (contains(needs.*.result, 'failure') && 'failure') }}"
+          cancelledText="<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Build #${{ github.run_number }}> of *${{ github.repository }}@${{ github.ref_name }}* by *${{ github.actor }}* was cancelled.😥"
+          status="${{ (contains(needs.*.result, 'cancelled') && 'cancelled') || (contains(needs.*.result, 'failure') && 'failure') || 'success' }}"
 
-          if [ "$status" = 'failure' ]; then
+          if [ "$status" = 'success' ]; then
+          color='good'
+          text=$successText
+          elif [ "$status" = 'failure' ]; then
           color='danger'
           text=$failureText
+          elif [ "$status" = "cancelled" ]; then
+            color='warning'
+            text=$cancelledText
+          fi
 
           echo "{attachments: [{text: \"$text\", color: \"$color\"}]}" | curl \
             "${{ secrets.SLACK_WEBHOOK_URL }}" \
