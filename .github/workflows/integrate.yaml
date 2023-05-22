@@ -34,9 +34,25 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # Executes subsequent steps only if the previous step fails
-      - name: Handle build failure
-        if: ${{ failure() }}
-        run: |
-          echo "Build failed. Sending notification to Slack."
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Build failed in GitHub repository."}' <https://hooks.slack.com/services/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>
+  send_notification_to_slack:
+    name: Send notification to Slack
+    runs-on: ubuntu-22.04
+    if: ${{ needs.Build.result == 'failure' }}
+    needs: [Build]
+
+    steps:
+      - run: |
+          failureText="❌ *Alert:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Build #${{ github.run_number }}> has failed. Review the build logs for more details. \n*Repository:* ${{ github.repository }} \n*Branch:* ${{ github.head_ref }} \n*Event:* ${{ github.event_name }} \n*Submitted by:* ${{ github.actor }}"
+
+          status="${{ contains(needs.*.result, 'failure') && 'failure' }}"
+
+          if [ "$status" = 'failure' ]; then
+            color='danger'
+            text=$failureText
+          fi
+
+          echo "{attachments: [{text: \"$text\", color: \"$color\"}]}" | curl \
+            "${{ secrets.SLACK_WEBHOOK_URL }}" \
+            -X "POST" \
+            --header "Content-Type: application/json" \
+            --data-binary @-
