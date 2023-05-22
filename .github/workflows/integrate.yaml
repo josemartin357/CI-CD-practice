@@ -43,7 +43,7 @@ jobs:
     steps:
       - run: |
           successText="<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Build #${{ github.run_number }}> of *${{ github.repository }}@${{ github.ref_name }}* by *${{ github.actor }}* completed successfully."
-          failureText="Alert: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Build # ${{ github.run_number }}> has failed. \nRepository: *${{ github.repository }}* \nBranch: *${{ github.head_ref }}* \nSubmitted by *${{ github.actor }}* \nEvent Name: *${{ github.event_name }}* \nCommit: *${{ github.sha }}* \nPlease review the build logs for more details"
+          failureText="**Alert:** <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Build # ${{ github.run_number }}> has failed. \n**Repository:** *${{ github.repository }}* \n**Branch:** *${{ github.head_ref }}* \n**Submitted by:** *${{ github.actor }}* \n**Event:** *${{ github.event_name }}* \n**Commit:** *${{ github.sha }}* \nPlease review the build logs for more details"
           cancelledText="<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Build #${{ github.run_number }}> of *${{ github.repository }}@${{ github.ref_name }}* by *${{ github.actor }}* was cancelled.😥"
           status="${{ (contains(needs.*.result, 'cancelled') && 'cancelled') || (contains(needs.*.result, 'failure') && 'failure') || 'success' }}"
 
