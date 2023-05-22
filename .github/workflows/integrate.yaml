@@ -37,12 +37,13 @@ jobs:
   send_notification_to_slack:
     name: Send notification to Slack
     runs-on: ubuntu-22.04
-    if: ${{ needs.Build.result == 'failure' }}
+    if: always()
     needs: [Build]
 
     steps:
       - run: |
-          failureText="❌"
+          failureText="❌ *Alert:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Build #${{ github.run_number }}> has failed. Review the build logs for more details. \n*Repository:* ${{ github.repository }} \n*Branch:* ${{ github.head_ref }} \n*Event:* ${{ github.event_name }} \n*Submitted by:* ${{ github.actor }}"
+
 
           status="${{ contains(needs.*.result, 'failure') && 'failure' }}"
 
