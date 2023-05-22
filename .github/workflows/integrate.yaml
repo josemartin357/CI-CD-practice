@@ -42,9 +42,9 @@ jobs:
 
     steps:
       - run: |
-          successText=":octocat: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Build #${{ github.run_number }}> of *${{ github.repository }}@${{ github.ref_name }}* by *${{ github.actor }}* completed successfully."
-          failureText=":octocat: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Build #${{ github.run_number }}> of *${{ github.repository }}@${{ github.ref_name }}* by *${{ github.actor }}* failed."
-          cancelledText=":octocat: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Build #${{ github.run_number }}> of *${{ github.repository }}@${{ github.ref_name }}* by *${{ github.actor }}* was cancelled.😥"
+          successText="<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Build #${{ github.run_number }}> of *${{ github.repository }}@${{ github.ref_name }}* by *${{ github.actor }}* completed successfully."
+          failureText="Alert: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Build # ${{ github.run_number }}> has failed. |Repository: *${{ github.repository }}* | Submitted by *${{ github.actor }}* |Please review the build logs for more details"
+          cancelledText="<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Build #${{ github.run_number }}> of *${{ github.repository }}@${{ github.ref_name }}* by *${{ github.actor }}* was cancelled.😥"
           status="${{ (contains(needs.*.result, 'cancelled') && 'cancelled') || (contains(needs.*.result, 'failure') && 'failure') || 'success' }}"
 
           if [ "$status" = 'success' ]; then
