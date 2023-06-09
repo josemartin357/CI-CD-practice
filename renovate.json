@@ -3,7 +3,7 @@
   "extends": ["config:base", ":rebaseStalePrs"],
   "baseBranches": ["main"],
   "automerge": false,
-  "schedule": ["0 0 12 1 * ?"],
+  "schedule": ["before 4am on the first day of the month"],
   "prHeader": "Dependencies version Updates",
   "prBodyNotes": [
     "Run the PR locally to confirm nothing has broken in Backstage. If there are build errors, run `yarn run lint:all` and follow the instructions to list/install the updated dependencies"
